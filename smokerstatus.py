@@ -18,6 +18,8 @@ def classify_patients(data_csv):
 
 def get_preds():
 
+# export preds to csv (two rows, row_id + status)
+    # name file datacsvname-preds.csv
 
 # ----- evaluate ----
 
@@ -61,5 +63,5 @@ if __name__ == "__main__":
     # eval 
     gold_labels = get_gold(data)
 
-    # evaluate_fst(gold_labels, preds)
+    # evaluate_fst(gold_labels, preds, data)
 
