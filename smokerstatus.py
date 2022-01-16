@@ -6,7 +6,7 @@ import argparse
 import pandas as pd
 
 # eval
-# from eval import **FUNCTION**
+from eval import evaluate_fst, get_wrong_labels
 
 
 def classify_patients(data_csv):
@@ -64,4 +64,7 @@ if __name__ == "__main__":
     gold_labels = get_gold(data)
 
     # evaluate_fst(gold_labels, preds, data)
+    # get_wrong_labels(gold_labels, preds, data)
+
+    print('Evaluation finished.')
 
