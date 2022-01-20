@@ -1,8 +1,6 @@
 # Rules as functions to classify patients
     # Functions ordered in order they should be called.
 
-
-# are imports needed in every .py file?
 import pandas as pd
 import nltk 
 from nltk import tokenize
