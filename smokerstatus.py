@@ -98,7 +98,7 @@ def export_preds(pred_labels, datacsv):
     preds_df = pd.DataFrame(pred_labels, columns=['row_id','smoking_status'])
 
     data_name = datacsv[:-4]
-    csv_name = data_name + 'preds.csv'
+    csv_name = data_name + '-preds.csv'
     preds_path = os.path.join(eval_output_dir, csv_name)
     preds_df.to_csv(preds_path, index=False)
 

@@ -147,7 +147,8 @@ def get_wrong_labels(gold_labels, preds, datacsv):
 
     wrong_labels_path = os.path.join(eval_output_dir, wrong_labels_name)
     wrong_labels_df.to_csv(wrong_labels_path, index=False)
-
+    
+    print('Incorrectly Labelled Entities (truth, pred, row_id)')
     print(*incorrectly_labelled, sep="\n")
 
 
