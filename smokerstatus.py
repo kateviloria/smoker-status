@@ -5,6 +5,7 @@
 import argparse
 import pandas as pd
 import os
+import nltk 
 
 # import functions
 from rules import baseline, smoker_in_household, find_nonsmokers, find_former_smokers, smoked_past, find_current_smokers, no_doubles, make_final_labels
@@ -70,9 +71,9 @@ def classify_patients(smoker_data_df):
     # initialise list of labels with all 'Unknown' labels
     final_labels = ['Unknown'] * data_length 
 
-    nonsmoker_added = (final_labels, nonsmoker_labels_unique, 'Nonsmoker')
-    formersmoker_added = (nonsmoker_added, formersmoker_labels_unique, 'Former Smoker')
-    smoker_added = (formersmoker_added, smoker_labels_unique, 'Smoker')
+    nonsmoker_added = make_final_labels(final_labels, nonsmoker_labels_unique, 'Non Smoker')
+    formersmoker_added = make_final_labels(nonsmoker_added, formersmoker_labels_unique, 'Former Smoker')
+    smoker_added = make_final_labels(formersmoker_added, smoker_labels_unique, 'Smoker')
 
     # zip preds with identifiers
     identifier_preds = list(zip(identifiers, smoker_added))
@@ -97,7 +98,8 @@ def export_preds(pred_labels, datacsv):
     preds_df = pd.DataFrame(pred_labels, columns=['row_id','smoking_status'])
 
     data_name = datacsv[:-4]
-    preds_path = os.path.join(eval_output_dir, data_name, '-preds.csv')
+    csv_name = data_name + 'preds.csv'
+    preds_path = os.path.join(eval_output_dir, csv_name)
     preds_df.to_csv(preds_path, index=False)
 
     # makes two lists, identifiers and label predictions

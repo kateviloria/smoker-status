@@ -3,6 +3,8 @@
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 from sklearn.metrics import balanced_accuracy_score 
 
@@ -55,12 +57,13 @@ def evaluate(gold_labels, preds, datacsv):
 
     disp = ConfusionMatrixDisplay(confusion_matrix = cm, 
                     display_labels = ['Former', 'Non', 'Smoker', 'Unknown'])
-    disp.plot(cmap="YlOrRd") 
+    disp.plot(cmap="YlOrRd") # GDK ERROR? 
 
     # save confusion matrix
     data_name = datacsv[:-4]
 
-    cm_path = os.path.join(eval_output_dir, data_name, '-cm.png')
+    fig_name = data_name + '-cm.png'
+    cm_path = os.path.join(eval_output_dir, fig_name)
     #cm_path = data_name + '-cm.png'
     plt.savefig(cm_path)
 
@@ -78,7 +81,8 @@ def evaluate(gold_labels, preds, datacsv):
     classreport_df = pd.DataFrame.from_dict(class_report_dict).transpose()
 
     # trying to send to dir instead
-    cr_path = os.path.join(eval_output_dir, data_name, '-classreport.csv')
+    report_name = data_name + '-classreport.csv'
+    cr_path = os.path.join(eval_output_dir, report_name)
 
     # cr_path = data_name + '-classreport.csv'
     classreport_df.to_csv(cr_path, index=False)
@@ -135,14 +139,17 @@ def get_wrong_labels(gold_labels, preds, datacsv):
             row = (truth, pred, identifier)
             incorrectly_labelled.append(row)
     
-    wrong_labels_df = pd.Dataframe(incorrectly_labelled, columns = ['gold', 'predicted', 'identifier'])
+    wrong_labels_df = pd.DataFrame(incorrectly_labelled, columns = ['gold', 'predicted', 'identifier'])
 
     # export to csv file
     data_name = datacsv[:-4]
-    # wrong_labels_path = data_name + '-wronglabels.csv'
-    wrong_labels_path = os.path.join(eval_output_dir, data_name, '-wronglabels.csv')
+    wrong_labels_name = data_name + '-wronglabels.csv'
+
+    wrong_labels_path = os.path.join(eval_output_dir, wrong_labels_name)
     wrong_labels_df.to_csv(wrong_labels_path, index=False)
 
     print(*incorrectly_labelled, sep="\n")
+
+
 
 
