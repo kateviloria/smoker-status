@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import balanced_accuracy_score 
 
 import pandas as pd
+import os
 
 
 # import functions
@@ -17,13 +18,17 @@ import pandas as pd
 
     # txt file name as csvname-eval.txt
 
-def evaluate_fst(gold_labels, preds, datacsv):
+eval_output_dir = 'eval-output'
+
+def evaluate(gold_labels, preds, datacsv):
     """
     Calculates, displays, and exports metrics of model preds compared to gold labels.
 
     Args:
         - gold_labels - (type dict) {patient-identifier: status, patient-identifier: status...}
         - preds - (type dict) {patient-identifier: predicted-status, ...}
+        - datacsv - name of source .csv file 
+
 
     Returns:
         - prints 
@@ -54,7 +59,9 @@ def evaluate_fst(gold_labels, preds, datacsv):
 
     # save confusion matrix
     data_name = datacsv[:-4]
-    cm_path = data_name + '-cm.png'
+
+    cm_path = os.path.join(eval_output_dir, data_name, '-cm.png')
+    #cm_path = data_name + '-cm.png'
     plt.savefig(cm_path)
 
     # classification report - precision, recall, F1, support (# of samples for each class)
@@ -69,7 +76,11 @@ def evaluate_fst(gold_labels, preds, datacsv):
                                      target_names = label_names,
                                      output_dict = True)
     classreport_df = pd.DataFrame.from_dict(class_report_dict).transpose()
-    cr_path = data_name + '-classreport.csv'
+
+    # trying to send to dir instead
+    cr_path = os.path.join(eval_output_dir, data_name, '-classreport.csv')
+
+    # cr_path = data_name + '-classreport.csv'
     classreport_df.to_csv(cr_path, index=False)
 
     print('Exported classification report to ', cr_path)
@@ -106,6 +117,7 @@ def get_wrong_labels(gold_labels, preds, datacsv):
     Args:
         - gold_labels - (type dict) {patient-identifier: status, patient-identifier: status...}
         - preds - (type dict) {patient-identifier: predicted-status, ...}
+        - datacsv - dataname
     
     Returns:
         - exports .csv file (gold, predicted, identifier/row_id)
@@ -127,11 +139,10 @@ def get_wrong_labels(gold_labels, preds, datacsv):
 
     # export to csv file
     data_name = datacsv[:-4]
-    wrong_labels_path = data_name + '-wronglabels.csv'
+    # wrong_labels_path = data_name + '-wronglabels.csv'
+    wrong_labels_path = os.path.join(eval_output_dir, data_name, '-wronglabels.csv')
     wrong_labels_df.to_csv(wrong_labels_path, index=False)
 
     print(*incorrectly_labelled, sep="\n")
-
-
 
 
