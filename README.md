@@ -2,7 +2,7 @@
 
 
 
-#### Design Decisions
+## Design Decisions
 - **split text into sentences immediately**
     - would be useful, but majority of texts are not full sentences (medical notes format), some would end up with one long sentence and the rest which are in sentence format are only one sentence (in a bigger dataset, this might just take up computational time and energy)
 - **tokenizer**
@@ -14,18 +14,22 @@
     - not that great for medical notes format
     - mostly thought it would be useful for texts with negation
     - 'Does not drink, smoke, or do any drugs.' (row_id 26743) - with spacy's dependency parser, the negation's head is only drink, difficult to pick up that both 'smoke' and 'do any drugs' are included in negation ([Image Below](https://explosion.ai/demos/displacy?text=Does%20not%20drink%2C%20smoke%2C%20or%20do%20any%20drugs.&model=en_core_web_sm&cpu=1&cph=1)
-![SpaCy Dependency Labels](dep-labels.png)
+![SpaCy Dependency Parsing](https://github.com/kateviloria/smoker-status/blob/main/images/dep-labels.png)
+- **constituency parsing**
+    - looks more promising compared to dependencies
+    - 'Does not drink, smoke, or do any drugs.' (row_id 26743) - CoreNLP/Stanza parses it where mother node is sister to 'does not' in tree, captures negation 'drink', 'smoke', and 'do any drugs', need to figure out how to implement this! ([Image Below](https://corenlp.run/)
+![CoreNLP Constituency Parsing](https://github.com/kateviloria/smoker-status/blob/main/images/constituency-labels.png)
+
 - **rule/processing order**
     - baseline - any texts that have no "smoke-related" rules are immediately labelled as Unknown (17708 labelled as Former Smoker but no information indicating so, at least for a program)
     - started with more definitive rules with clearer patterns, Nonsmoker labels
     - started differentiating Former Smoker and Smoker (where I found Former Smoker to have clearer/"easier" patterns to handle")
 
-- **constituency parsing**
-    - 'Does not drink, smoke, or do any drugs.' (row_id 26743) - CoreNLP/Stanza parses it where mother node is sister to 'does not' in tree, captures negation 'drink', 'smoke', and 'do any drugs', need to figure out how to implement this!
+
 - **most difficult label: smoker**
     - considered implementing a rule that if it didn't have a label yet and it includes 'smoking', 'smoker', 'smoke' (more "present" words) to label as Smoker, but opted against to preserve precision
 
-#### Edge Cases
+## Edge Cases
 - any time a text speaks about smoking another substance
 - 34464 - have both 'current smoker' and 'married current smoker'
 - ppd rule won't work with the "** around numbers, if corrected should work
@@ -33,7 +37,7 @@
 
 
 
-#### Concerns & Future Ideas
+## Concerns & Future Ideas
 - how to separate medical notes based on headings
     - anything before ':' is a category and anything after is its contents?
 - **negation** (especially when used in a list)
