@@ -108,7 +108,7 @@ smoking_present = ['smoking', 'smokes', 'smoke']
 - using word vectors and vector calculations
 - explore using 'Social History' in medical notes as indicator for smoke status
 
-#### Texts That are Incorrectly Labelled
+#### Incorrectly Labelled Texts
 - 5377, Smoker: We recommend that you work closely with your doctor to quit smoking to help preserve your lung function and reduce your risk for further COPD exacerbation.
 - 46361, Smoker: He restarted smoke 3 weeks ago.
 - 12798, Smoker: 30pk-yr smoking, current. Drinks 2-3 per night.
