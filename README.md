@@ -154,7 +154,7 @@ smoking_present = ['smoking', 'smokes', 'smoke']
     - `DATAFILENAME-preds.csv` - classifier predictions (row_id, smoking_status)
     - `DATAFILENAME-wronglabels.csv` - incorrectly labelled texts (gold, pred, row_id)
 
-#### Imports
+#### Script Imports
 - argparse
 - pandas 
 - os
