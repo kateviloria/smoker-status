@@ -7,8 +7,7 @@ python smokerstatus.py [DATA CSV FILENAME]
 ```  
 
 ### Rules Summary
-----
-* also in order of implementation, further explanations and cases possibly missed or mislabelled commented in functions in `rules.py`
+###### in order of implementation, further explanations and cases possibly missed or mislabelled commented in functions in `rules.py`
 - **Unknown**
     - baseline - any texts with no "smoke-related" words
     - 'smoker in the household'
@@ -23,34 +22,36 @@ python smokerstatus.py [DATA CSV FILENAME]
     - 'former smoker' or 'Former smoker'
     - 'smoked SMOKED_NN for A_NUMBER TEMPORAL_WORD' 
     - 'smoked' and 'quit' must appear
-- Smoker
+- **Smoker**
     - 'CURRENT_WORD smoker'
     - 'CURRENT_WORD smoking'
     - 'due to smoking'
     - 'SMOKING_PRESENT A_NUMBER ppd'
-    - A_NUMNBER-PPD (eg. 2PPD)
+    - 'A_NUMNBER-PPD' (eg. 2PPD)
     
 #### Indicator Words
 ```
-python
-smoke_words = ['smoke', 'smoker', 'smoking', 'Smoking', 'smokes', 'smoked', 'Smoked', 'ppd', 'nonsmoker', 'Nonsmoker','tob', 'tobacco', 'cigarettes']
+smoke_words = ['smoke', 'smoker', 'smoking', 'Smoking', 'smokes', 'smoked', 'Smoked', 
+'ppd', 'nonsmoker', 'Nonsmoker','tob', 'tobacco', 'cigarettes']
 
 act_of_smoking = ['smoking', 'cigarettes', 'tobacco', 'tob']
 smoked_NN = ['cigarette', 'cigarettes', 'cigs', 'tobacco', 'tob', 'packs', 'pack'] 
 temporal_words = ['years', 'yrs', 'months', 'weeks', 'wks', 'days'] 
 approximate_words = ['under', 'over', 'around', 'approx', 'approximately','about']
 
-current_words = ['current', 'Current', 'currently', 'Currently', 'active', 'Active', 'actively', 'Actively', 'still', 'Still', 'reports', 'Reports']
+current_words = ['current', 'Current', 'currently', 'Currently', 'active', 'Active', 'actively', 
+'Actively', 'still', 'Still', 'reports', 'Reports']
 smoking_present = ['smoking', 'smokes', 'smoke']
 ```
 
-### Overall Evaluation
 -----
+### Overall Evaluation
 ![Classifier Confusion Matrix](https://github.com/kateviloria/smoker-status/blob/main/eval-output/smoker_status-cm.png)
-- aimed for a higher precision, in a healthcare domain, it would be more useful to end up with an 'Unknown' if unsure to flag that it must be double checked (of course in a larger scale, it also presents a different kind of risk)
+- aimed for a higher precision, in a healthcare domain, I thought it would be more useful to end up with an 'Unknown' if unsure to flag someone that it must be double checked (of course in a larger scale, it also presents a different kind of risk)
+- although in this case, it's not ideal since there is a significant amount of 'Unknown' labels (40/70, more than half)
+----
 
 ### Design Decisions
-----
 - **split text into sentences immediately**
     - would be useful, but majority of texts are not full sentences (medical notes format), some would end up with one long sentence and the rest which are in sentence format are only one sentence (in a bigger dataset, this might just take up computational time and energy)
 - **tokenizer**
@@ -75,18 +76,17 @@ smoking_present = ['smoking', 'smokes', 'smoke']
     - specific phrases to search for typically considered if it would appear in a larger dataset (is it a common saying? is it something that will be regularly used/said by doctors?)
 
 - **most difficult label: smoker**
-    - considered implementing a rule that if it didn't have a label yet and it includes 'smoking', 'smoker', 'smoke' (more "present" words) to label as Smoker, but opted against to preserve precision
+    - considered implementing a rule that if it didn't have a label yet and it includes 'smoking', 'smoker', 'smoke' (more "present" words) to label as Smoker, but opted against it to preserve precision
 
-### Edge Cases
 ----
+### Edge Cases
 - any time a text speaks about smoking another substance
 - 34464 - have both 'current smoker' and 'married current smoker'
 - ppd rule won't work with the ** around numbers, if corrected should work
 - Former Smoker: 'quit A_NUMBER TEMPORAL_WORD ago' - might have quit another drug
 
-
-### Concerns & Things To Refine
 ----
+### Concerns & Things To Refine
 - smoke-related word as an indicator of smoke status only appearing once
     - some rules rely on a smoke-related word appearing only once (thought it would be okay for now since medical notes are meant to be concise and terse), especially the code/rules that find exact phrases 
     - Unknown rule relies on finding "smoker in the household" where "smoker" is only used once
@@ -164,6 +164,7 @@ smoking_present = ['smoking', 'smokes', 'smoke']
 - Bae, Y. S., Kim, K. H., Kim, H. K., Choi, S. W., Ko, T., Seo, H. H., Lee, H.-Y., &amp; Jeon, H. (2021). [Keyword extraction algorithm for classifying smoking status from unstructured bilingual electronic health records based on Natural Language Processing](https://doi.org/10.3390/app11198812). Applied Sciences, 11(19), 8812. 
 - Jonnagaddala, J., Dai, H.-J., Ray, P., &amp; Liaw, S.-T. (2015). [A preliminary study on automatic identification of patient smoking status in unstructured electronic health records](https://doi.org/10.18653/v1/w15-3818). Proceedings of BioNLP 15.
 - Bui, D. D., &amp; Zeng-Treitler, Q. (2014). [Learning regular expressions for clinical text classification](https://doi.org/10.1136/amiajnl-2013-002411). Journal of the American Medical Informatics Association, 21(5), 850–857. 
-- add FST references
+- FST tutorials ([1](https://python-course.eu/applications-python/finite-state-machine.php), [2](https://martin-thoma.com/how-to-draw-a-finite-state-machine/))
 - [SpaCY Dependency Parser and Visualizer](https://explosion.ai/demos/displacy?text=Does%20not%20drink%2C%20smoke%2C%20or%20do%20any%20drugs.&model=en_core_web_sm&cpu=1&cph=1)
 - [CoreNLP Constituency Parser](https://corenlp.run/)
+- [Penn Treebank POS-tags](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html)
