@@ -7,7 +7,7 @@ python smokerstatus.py [DATA CSV FILENAME]
 ```  
 
 ### Rules Summary
-###### in order of implementation, further explanations and cases possibly missed or mislabelled commented in functions in `rules.py`
+in order of implementation, further explanations and cases possibly missed or mislabelled commented in functions in `rules.py`
 - **Unknown**
     - baseline - any texts with no "smoke-related" words
     - 'smoker in the household'
@@ -86,7 +86,7 @@ smoking_present = ['smoking', 'smokes', 'smoke']
 - Former Smoker: 'quit A_NUMBER TEMPORAL_WORD ago' - might have quit another drug
 
 ----
-### Concerns & Things To Refine
+### Concerns & Things to Refine
 - smoke-related word as an indicator of smoke status only appearing once
     - some rules rely on a smoke-related word appearing only once (thought it would be okay for now since medical notes are meant to be concise and terse), especially the code/rules that find exact phrases 
     - Unknown rule relies on finding "smoker in the household" where "smoker" is only used once
@@ -148,6 +148,11 @@ smoking_present = ['smoking', 'smokes', 'smoke']
 - `smokerstatus.py` - main script
 - `rules.py` - rules for classification and helper functions
 - `eval.py` - evaluation (exports classification report, confusion matrix, and incorrectly labelled data)
+- `/eval-output` - directory where evaluation outputs are stored
+    - `DATAFILENAME-classreport.csv` - classification report of script
+    - `DATAFILENAME-cm.png` - confusion matrix
+    - `DATAFILENAME-preds.csv` - classifier predictions (row_id, smoking_status)
+    - `DATAFILENAME-wronglabels.csv` - incorrectly labelled texts (gold, pred, row_id)
 
 #### Imports
 - argparse
